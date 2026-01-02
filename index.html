@@ -1,14 +1,734 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.2">
-  <style type="text/css">
+  <meta charset="UTF-8" />
+  <title>Azzarello Teen Independence Assessment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --accent: #22c55e;
+      --accent-soft: rgba(34,197,94,0.15);
+      --danger: #ef4444;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --yellow: #facc15;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: var(--text);
+      padding: 1.5rem;
+    }
+    .app {
+      max-width: 900px;
+      margin: 0 auto 3rem auto;
+    }
+    h1, h2, h3 {
+      margin: 0 0 0.75rem 0;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    h1 { font-size: 1.7rem; }
+    h2 { font-size: 1.2rem; margin-top: 1.5rem; }
+    p { margin: 0 0 0.75rem 0; color: var(--muted); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+      gap: 0.35rem;
+      margin-bottom: 0.75rem;
+    }
+    .pill span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(148,163,184,0.08), transparent 50%),
+                  rgba(15,23,42,0.95);
+      border-radius: 1rem;
+      border: 1px solid rgba(148,163,184,0.2);
+      padding: 1.25rem 1.25rem 1.5rem 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.8);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .badge {
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: 1px solid rgba(148,163,184,0.4);
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 0.75rem 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+      color: var(--muted);
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.5rem 0.6rem;
+      background: rgba(15,23,42,0.9);
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(34,197,94,0.4);
+    }
+    textarea { min-height: 60px; resize: vertical; }
+
+    .inline-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .radio-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .radio-pill input {
+      margin: 0;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    .section-score {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .btn-row {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.55rem 1.2rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow: 0 10px 25px rgba(22,163,74,0.7);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    .result-box {
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      background: rgba(15,23,42,0.9);
+      font-size: 0.85rem;
+    }
+    .result-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.15rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+    .result-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .result-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.35rem;
+    }
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.4);
+      color: var(--muted);
+    }
+
+    .independence-high {
+      color: var(--accent);
+    }
+    .independence-mid {
+      color: var(--yellow);
+    }
+    .independence-low {
+      color: var(--danger);
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 1rem; }
+      h1 { font-size: 1.4rem; }
+      .card { padding: 1rem; }
+    }
   </style>
 </head>
 <body>
+  <div class="app">
+    <div class="card">
+      <div class="pill">
+        <span>⚡</span> Azzarello Family · Teen Independence
+      </div>
+      <div class="card-header">
+        <div>
+          <h1>Teen Independence Check-In</h1>
+          <p>Training for independence: building your future freedom, earning potential, and confidence at 18 and beyond.</p>
+        </div>
+        <div class="badge">Max earning potential: $250 / month</div>
+      </div>
+      <div class="grid">
+        <div>
+          <label>Teen name</label>
+          <input id="teenName" type="text" placeholder="Jaydon / Gianna" />
+        </div>
+        <div>
+          <label>Age</label>
+          <input id="teenAge" type="number" min="10" max="20" placeholder="15 / 17" />
+        </div>
+        <div>
+          <label>Month</label>
+          <input id="month" type="text" placeholder="January 2026" />
+        </div>
+      </div>
+      <p class="hint">
+        This is about your <strong>freedom</strong> and independence. Higher consistency and initiative = more earning potential and more freedom.
+      </p>
+    </div>
+
+    <!-- Vision -->
+    <div class="card">
+      <div class="card-header">
+        <h2>1 · Your 2026 vision</h2>
+        <div class="badge">Direction</div>
+      </div>
+      <div class="grid">
+        <div>
+          <label>What do you want to accomplish in 2026?</label>
+          <textarea id="visionGoals"></textarea>
+        </div>
+        <div>
+          <label>Top 2–3 areas you want to grow in</label>
+          <textarea id="visionGrowth"></textarea>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:0.75rem;">
+        <div>
+          <label>What do you need from your parents?</label>
+          <textarea id="visionParents"></textarea>
+        </div>
+        <div>
+          <label>What’s working / not working in our family?</label>
+          <textarea id="visionFamily"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Academics -->
+    <div class="card">
+      <div class="card-header">
+        <h2>2 · Academics</h2>
+        <div class="badge">Opportunity & trust</div>
+      </div>
+      <p class="hint">Strong grades and consistent effort = more opportunities, more trust, more freedom.</p>
+
+      <div class="grid">
+        <div>
+          <label>Currently enrolled in school?</label>
+          <div class="radio-group">
+            <label class="radio-pill"><input type="radio" name="enrolled" value="yes" checked> Yes</label>
+            <label class="radio-pill"><input type="radio" name="enrolled" value="no"> No</label>
+          </div>
+        </div>
+        <div>
+          <label>Current grades</label>
+          <select id="grades">
+            <option value="5">All A’s</option>
+            <option value="4">Mostly A’s, some B’s</option>
+            <option value="3">Mostly B’s</option>
+            <option value="2">At least one C</option>
+            <option value="1">At least one D or lower</option>
+          </select>
+          <div class="hint">Higher grade band = higher academic score.</div>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:0.75rem;">
+        <div>
+          <label>Homework completion</label>
+          <select id="homework">
+            <option value="5">Always on time</option>
+            <option value="4">Most of the time</option>
+            <option value="3">Sometimes</option>
+            <option value="2">Rarely</option>
+            <option value="1">Almost never</option>
+          </select>
+        </div>
+        <div>
+          <label>Effort this month (1–5)</label>
+          <input id="effort" type="number" min="1" max="5" value="3" />
+          <div class="hint">1 = very low, 5 = excellent effort.</div>
+        </div>
+      </div>
+
+      <div class="section-score">
+        Academics score (1–5) will be calculated automatically based on grades, homework, and effort.
+      </div>
+    </div>
+
+    <!-- Personal Development -->
+    <div class="card">
+      <div class="card-header">
+        <h2>3 · Personal development</h2>
+        <div class="badge">Habits & discipline</div>
+      </div>
+      <p class="hint">Healthy habits build self-discipline, which increases both trust and freedom.</p>
+
+      <div class="grid">
+        <div>
+          <label>Days you WANT to exercise per week</label>
+          <input id="targetExercise" type="number" min="0" max="7" value="3" />
+        </div>
+        <div>
+          <label>Days you actually exercised this week</label>
+          <input id="actualExercise" type="number" min="0" max="7" value="0" />
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:0.75rem;">
+        <div>
+          <label>Chapters you WANT to read per day</label>
+          <input id="targetChapters" type="number" min="0" max="20" value="1" />
+        </div>
+        <div>
+          <label>Chapters read this week (total)</label>
+          <input id="actualChapters" type="number" min="0" max="200" value="0" />
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:0.75rem;">
+        <div>
+          <label>Hobby you want to explore / improve</label>
+          <input id="hobbyName" type="text" placeholder="Example: guitar, art, coding, sports" />
+          <label style="margin-top:0.4rem;">Hours per week you WANT to commit</label>
+          <input id="hobbyTarget" type="number" min="0" max="40" value="2" />
+        </div>
+        <div>
+          <label>Hours per week you actually did (average)</label>
+          <input id="hobbyActual" type="number" min="0" max="40" value="0" />
+          <label style="margin-top:0.4rem;">Nights in bed by target time this week</label>
+          <input id="nightsOnTime" type="number" min="0" max="7" value="0" />
+          <label style="margin-top:0.4rem;">Days you woke up on time this week</label>
+          <input id="morningsOnTime" type="number" min="0" max="7" value="0" />
+        </div>
+      </div>
+
+      <div class="section-score">
+        Personal development score (1–5) will be calculated from how closely you match your targets.
+      </div>
+    </div>
+
+    <!-- Household Skills & Bonus Habits -->
+    <div class="card">
+      <div class="card-header">
+        <h2>4 · Household skills & initiative</h2>
+        <div class="badge">Readiness at home</div>
+      </div>
+      <p class="hint">Volunteering to help and managing your space and money show maturity and independence.</p>
+
+      <div class="grid">
+        <div>
+          <label>Bedroom – how it SHOULD look (1–10)</label>
+          <input id="bedroomShould" type="number" min="1" max="10" value="7" />
+          <label style="margin-top:0.35rem;">Bedroom – how it ACTUALLY looks (1–10)</label>
+          <input id="bedroomActual" type="number" min="1" max="10" value="5" />
+        </div>
+        <div>
+          <label>Bathroom – how it SHOULD look (1–10)</label>
+          <input id="bathShould" type="number" min="1" max="10" value="7" />
+          <label style="margin-top:0.35rem;">Bathroom – how it ACTUALLY looks (1–10)</label>
+          <input id="bathActual" type="number" min="1" max="10" value="5" />
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:0.75rem;">
+        <div>
+          <label>Money readiness (1–10)</label>
+          <input id="moneyReady" type="number" min="1" max="10" value="5" />
+          <label style="margin-top:0.35rem;">Budget habits</label>
+          <select id="budget">
+            <option value="5">Yes, and I stuck to it</option>
+            <option value="3">Yes, but I struggled</option>
+            <option value="1">No budget yet</option>
+          </select>
+        </div>
+        <div>
+          <label>Laundry readiness (1–10)</label>
+          <input id="laundryReady" type="number" min="1" max="10" value="5" />
+          <label style="margin-top:0.35rem;">Laundry completion</label>
+          <select id="laundry">
+            <option value="5">Yes, I handled it all</option>
+            <option value="3">Yes, but needed reminders</option>
+            <option value="1">No, someone else did it</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:0.75rem;">
+        <div>
+          <label>Cooking readiness (1–10)</label>
+          <input id="cookingReady" type="number" min="1" max="10" value="5" />
+          <label style="margin-top:0.35rem;">Times you offered to help with meals (this week)</label>
+          <input id="mealsOffered" type="number" min="0" max="50" value="0" />
+        </div>
+        <div>
+          <label>Times you did chores without being asked (this week)</label>
+          <input id="choresVoluntary" type="number" min="0" max="50" value="0" />
+          <label style="margin-top:0.35rem;">Average daily phone use (hours/day)</label>
+          <input id="phoneHours" type="number" min="0" max="24" step="0.1" value="4" />
+          <div class="hint">Goal: ≤ 3 hours/day to unlock the full phone-use bonus.</div>
+        </div>
+      </div>
+
+      <div class="section-score">
+        Household skills score (1–5) and bonus earnings will be calculated from these answers.
+      </div>
+    </div>
+
+    <!-- Monthly Results -->
+    <div class="card">
+      <div class="card-header">
+        <h2>5 · Monthly results & independence</h2>
+        <div class="badge">Earnings & freedom</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="calculateResults()">Calculate results</button>
+        <button class="btn-secondary" onclick="resetForm()">Reset</button>
+      </div>
+
+      <div class="results-grid" style="margin-top:1.25rem;">
+        <div class="result-box">
+          <div class="result-label">Section scores (1–5)</div>
+          <div class="result-value" id="sectionScoresDisplay">–</div>
+          <div class="result-sub" id="sectionScoresDetail"></div>
+        </div>
+        <div class="result-box">
+          <div class="result-label">Base earnings (bands)</div>
+          <div class="result-value" id="baseEarningsDisplay">$0</div>
+          <div class="result-sub" id="baseEarningsDetail"></div>
+        </div>
+        <div class="result-box">
+          <div class="result-label">Bonus earnings</div>
+          <div class="result-value" id="bonusDisplay">$0</div>
+          <div class="result-sub" id="bonusDetail"></div>
+        </div>
+        <div class="result-box">
+          <div class="result-label">Total earnings & independence</div>
+          <div class="result-value" id="totalDisplay">$0</div>
+          <div class="result-sub" id="independenceDetail"></div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:1.1rem;">Reflection</h3>
+      <div class="grid">
+        <div>
+          <label>One thing you’re proud of this month</label>
+          <textarea id="proud"></textarea>
+        </div>
+        <div>
+          <label>One area to improve & next step</label>
+          <textarea id="improve"></textarea>
+        </div>
+      </div>
+
+      <div class="tag-row">
+        <div class="tag">More initiative = more earning potential</div>
+        <div class="tag">Better habits = more independence</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const MAX_EARNINGS = 250;
+
+    function clamp(val, min, max) {
+      const n = Number(val);
+      if (isNaN(n)) return min;
+      return Math.min(Math.max(n, min), max);
+    }
+
+    function calculateAcademicScore() {
+      const grades = clamp(document.getElementById("grades").value, 1, 5);
+      const homework = clamp(document.getElementById("homework").value, 1, 5);
+      const effort = clamp(document.getElementById("effort").value, 1, 5);
+      const avg = (grades + homework + effort) / 3;
+      return Math.round(avg * 10) / 10;
+    }
+
+    function ratioScore(actual, target) {
+      target = clamp(target, 0, 9999);
+      actual = clamp(actual, 0, 9999);
+      if (target <= 0) return 3; // neutral if no target
+      const ratio = actual / target;
+      if (ratio >= 1.0) return 5;
+      if (ratio >= 0.7) return 4;
+      if (ratio >= 0.4) return 3;
+      if (ratio > 0) return 2;
+      return 1;
+    }
+
+    function calculatePersonalScore() {
+      const targetExercise = clamp(document.getElementById("targetExercise").value, 0, 7);
+      const actualExercise = clamp(document.getElementById("actualExercise").value, 0, 7);
+      const targetChapters = clamp(document.getElementById("targetChapters").value, 0, 20);
+      const actualChapters = clamp(document.getElementById("actualChapters").value, 0, 200);
+      const hobbyTarget = clamp(document.getElementById("hobbyTarget").value, 0, 40);
+      const hobbyActual = clamp(document.getElementById("hobbyActual").value, 0, 40);
+      const nightsOnTime = clamp(document.getElementById("nightsOnTime").value, 0, 7);
+      const morningsOnTime = clamp(document.getElementById("morningsOnTime").value, 0, 7);
+
+      const exScore = ratioScore(actualExercise, targetExercise);
+      const readScore = ratioScore(
+        actualChapters,
+        targetChapters > 0 ? targetChapters * 7 : 0
+      );
+      const hobbyScore = ratioScore(hobbyActual, hobbyTarget);
+      const sleepScore = ratioScore(nightsOnTime, 7);
+      const wakeScore = ratioScore(morningsOnTime, 7);
+
+      const avg = (exScore + readScore + hobbyScore + sleepScore + wakeScore) / 5;
+      return Math.round(avg * 10) / 10;
+    }
+
+    function calculateHouseholdScore() {
+      const bedroomShould = clamp(document.getElementById("bedroomShould").value, 1, 10);
+      const bedroomActual = clamp(document.getElementById("bedroomActual").value, 1, 10);
+      const bathShould = clamp(document.getElementById("bathShould").value, 1, 10);
+      const bathActual = clamp(document.getElementById("bathActual").value, 1, 10);
+      const moneyReady = clamp(document.getElementById("moneyReady").value, 1, 10);
+      const laundryReady = clamp(document.getElementById("laundryReady").value, 1, 10);
+      const cookingReady = clamp(document.getElementById("cookingReady").value, 1, 10);
+      const budget = clamp(document.getElementById("budget").value, 1, 5);
+      const laundry = clamp(document.getElementById("laundry").value, 1, 5);
+
+      const roomScore = ratioScore(bedroomActual, bedroomShould);
+      const bathScore = ratioScore(bathActual, bathShould);
+      const readinessAvg = (moneyReady + laundryReady + cookingReady) / 3;
+      const readinessScore = readinessAvg >= 8 ? 5 :
+                             readinessAvg >= 6 ? 4 :
+                             readinessAvg >= 4 ? 3 :
+                             readinessAvg >= 2 ? 2 : 1;
+      const budgetScore = budget;   // 1–5
+      const laundryScore = laundry; // 1–5
+
+      const avg =
+        (roomScore + bathScore + readinessScore + budgetScore + laundryScore) / 5;
+      return Math.round(avg * 10) / 10;
+    }
+
+    function baseEarningsFromScore(avgScore) {
+      if (avgScore >= 4.75) return 250;
+      if (avgScore >= 3.75) return 200;
+      if (avgScore >= 2.75) return 150;
+      if (avgScore >= 1.75) return 100;
+      return 50;
+    }
+
+    function calculateBonus() {
+      const choresVoluntary = clamp(document.getElementById("choresVoluntary").value, 0, 999);
+      const mealsOffered = clamp(document.getElementById("mealsOffered").value, 0, 999);
+      const phoneHours = clamp(document.getElementById("phoneHours").value, 0, 24);
+
+      let bonus = 0;
+      let details = [];
+
+      // Chores bonus
+      if (choresVoluntary >= 8) {
+        bonus += MAX_EARNINGS * 0.10;
+        details.push(`Chores initiative: +$${(MAX_EARNINGS * 0.10).toFixed(2)}`);
+      } else if (choresVoluntary >= 3) {
+        bonus += MAX_EARNINGS * 0.05;
+        details.push(`Chores initiative: +$${(MAX_EARNINGS * 0.05).toFixed(2)}`);
+      } else {
+        details.push("Chores initiative: no bonus");
+      }
+
+      // Meals bonus
+      if (mealsOffered >= 4) {
+        bonus += MAX_EARNINGS * 0.10;
+        details.push(`Meal help: +$${(MAX_EARNINGS * 0.10).toFixed(2)}`);
+      } else if (mealsOffered >= 2) {
+        bonus += MAX_EARNINGS * 0.05;
+        details.push(`Meal help: +$${(MAX_EARNINGS * 0.05).toFixed(2)}`);
+      } else {
+        details.push("Meal help: no bonus");
+      }
+
+      // Phone bonus
+      if (phoneHours <= 3) {
+        bonus += MAX_EARNINGS * 0.10;
+        details.push(`Phone use ≤ 3 hrs/day: +$${(MAX_EARNINGS * 0.10).toFixed(2)}`);
+      } else if (phoneHours <= 4) {
+        bonus += MAX_EARNINGS * 0.05;
+        details.push(`Phone use 3–4 hrs/day: +$${(MAX_EARNINGS * 0.05).toFixed(2)}`);
+      } else {
+        details.push("Phone use > 4 hrs/day: no bonus");
+      }
+
+      return { bonus: Math.round(bonus), details };
+    }
+
+    function independenceLevel(avgScore, totalEarnings) {
+      if (avgScore >= 4 && totalEarnings >= 200) {
+        return {
+          label: "High independence",
+          className: "independence-high",
+          description:
+            "More freedom: later curfew, more flexible plans, and less checking as long as habits stay consistent."
+        };
+      } else if (avgScore >= 3) {
+        return {
+          label: "Stable independence",
+          className: "independence-mid",
+          description:
+            "Current level of freedom stays the same. Choose one focus area to improve next month."
+        };
+      } else {
+        return {
+          label: "More structure & coaching",
+          className: "independence-low",
+          description:
+            "Closer check-ins on school, chores, and phone use until the next check-in. This is about support, not punishment."
+        };
+      }
+    }
+
+    function calculateResults() {
+      const academicScore = calculateAcademicScore();
+      const personalScore = calculatePersonalScore();
+      const householdScore = calculateHouseholdScore();
+
+      const avgScore = Math.round(((academicScore + personalScore + householdScore) / 3) * 10) / 10;
+      const base = baseEarningsFromScore(avgScore);
+      const { bonus, details } = calculateBonus();
+
+      const total = Math.min(base + bonus, MAX_EARNINGS);
+
+      // Update section scores display
+      document.getElementById("sectionScoresDisplay").textContent =
+        `Avg ${avgScore.toFixed(1)} / 5`;
+      document.getElementById("sectionScoresDetail").textContent =
+        `Academics: ${academicScore.toFixed(1)} · Personal: ${personalScore.toFixed(1)} · Household: ${householdScore.toFixed(1)}`;
+
+      // Base earnings display
+      document.getElementById("baseEarningsDisplay").textContent = `$${base}`;
+      document.getElementById("baseEarningsDetail").textContent =
+        `Base score band from average ${avgScore.toFixed(1)} / 5.`;
+
+      // Bonus display
+      document.getElementById("bonusDisplay").textContent = `$${bonus}`;
+      document.getElementById("bonusDetail").textContent = details.join(" · ");
+
+      // Total & independence
+      const level = independenceLevel(avgScore, total);
+      document.getElementById("totalDisplay").textContent =
+        `$${total} (max $${MAX_EARNINGS})`;
+      document.getElementById("independenceDetail").innerHTML =
+        `<span class="${level.className}">${level.label}</span> – ${level.description}`;
+    }
+
+    function resetForm() {
+      if (!confirm("Reset all fields for this month?")) return;
+      document.location.reload();
+    }
+  </script>
 </body>
 </html>
